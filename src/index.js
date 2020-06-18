@@ -1,17 +1,38 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import {createStore} from 'redux';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const reducer = (state = 0, action) => {
+  switch (action.type){
+    case 'btn-plus':
+      return state + 1;
+    case 'btn-minus':
+      return state - 1;
+    case 'btn-nullify':
+      return state*0;
+    default:
+      return state;
+  }
+}
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const plus = () => ({type:'btn-plus'});
+const minus = () => ({type:'btn-minus'});
+const nullify = () => ({type:'btn-nullify'});
+
+const store = createStore(reducer);
+
+document.getElementById('btn-plus').addEventListener('click', () => {
+  store.dispatch(plus());
+});
+
+document.getElementById('btn-minus').addEventListener('click', () => {
+  store.dispatch(minus());
+});
+
+document.getElementById('btn-nullify').addEventListener('click', () => {
+  store.dispatch(nullify());
+});
+
+const update = () =>{
+  document.getElementById('count').textContent = store.getState();
+}
+
+store.subscribe(update);
